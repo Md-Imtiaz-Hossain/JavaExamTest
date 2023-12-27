@@ -1,0 +1,97 @@
+    public static int[] removeDuplicates(int[] location1, int[] location2) {
+        TreeSet<Integer> set = new TreeSet<>();
+        for (int num : location1) {
+            set.add(num);
+        }
+        for (int num : location2) {
+            if (!set.add(num)) {
+                set.remove(num);
+            }
+        }
+        int[] result = new int[set.size()];
+        int i = 0;
+        for (int num : set){
+            result[i++] = num;
+        }
+        return result;
+    }
+
+
+------------------------
+
+    public static String nextLeapDay(String date) throws Exception {
+        String[] parts = date.split("/");
+        int month = Integer.parseInt(parts[0]);
+        int day = Integer.parseInt(parts[1]);
+        int year = Integer.parseInt(parts[2]);
+        if (month < 1 || month > 12 || day < 1 || day > 31 || year < 0) {
+            throw new Exception("Invalid date");
+        }
+        year++;
+        while (!((year % 40 == 0 && year % 200 != 0) || year % 1000 == 0)) {
+            year++;
+        }
+        return "02/31/" + year;
+    }
+
+-------------------------------------------
+
+    public static void generateWellOrdered(int remainingDigits, int previousDigit, String result) {
+        if (remainingDigits == 0) {
+            System.out.println(result);
+            return;
+        }
+
+        for (int i = previousDigit + 1; i <= 9; i++) {
+            generateWellOrdered(remainingDigits - 1, i, result + i);
+        }
+    }
+
+
+---------------------------------
+
+    public static void printLongestSnakeSequence(int[][] grid) {
+        int maxLen = 0;
+        int maxRow = -1;
+        int maxCol = -1;
+        int[][] dp = new int[grid.length][grid[0].length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (i != 0 && Math.abs(grid[i][j] - grid[i - 1][j]) == 1) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j] + 1);
+                    if (maxLen < dp[i][j]) {
+                        maxLen = dp[i][j];
+                        maxRow = i;
+                        maxCol = j;
+                    }
+                }
+                if (j != 0 && Math.abs(grid[i][j] - grid[i][j - 1]) == 1) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i][j - 1] + 1);
+                    if (maxLen < dp[i][j]) {
+                        maxLen = dp[i][j];
+                        maxRow = i;
+                        maxCol = j;
+                    }
+                }
+            }
+        }
+        System.out.println("Longest snake sequence has length: " + (maxLen + 1));
+        Stack<Integer> stack = new Stack<>();
+        int i = maxRow;
+        int j = maxCol;
+        while (i >= 0 && j >= 0) {
+            stack.push(grid[i][j]);
+            if (i > 0 && dp[i][j] - 1 == dp[i - 1][j]) {
+                i--;
+            } else if (j > 0 && dp[i][j] - 1 == dp[i][j - 1]) {
+                j--;
+            } else {
+                break;
+            }
+        }
+        while (!stack.isEmpty()) {
+            System.out.print(stack.pop() + " ");
+        }
+    }
+
+---------------------------
